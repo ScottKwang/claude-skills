@@ -13,7 +13,9 @@ cd claude-skills
 source ~/.zshrc
 ```
 
-Then just run `cc` to start Claude Code with permissions skipped.
+Then just run:
+- `cc` - Start Claude Code (skip permission prompts)
+- `ccr` - Resume last session (skip permissions + resume picker)
 
 ### 📦 Skills
 

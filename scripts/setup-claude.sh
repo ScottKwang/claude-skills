@@ -40,10 +40,17 @@ fi
 if [ -n "$SHELL_RC" ]; then
     if ! grep -q "alias cc=" "$SHELL_RC" 2>/dev/null; then
         echo "" >> "$SHELL_RC"
-        echo "# Claude Code alias - skip permission prompts" >> "$SHELL_RC"
+        echo "# Claude Code aliases" >> "$SHELL_RC"
         echo "alias cc='claude --dangerously-skip-permissions'" >> "$SHELL_RC"
-        echo "   ✅ Added 'cc' alias to $SHELL_RC"
+        echo "alias ccr='claude --dangerously-skip-permissions --resume'" >> "$SHELL_RC"
+        echo "   ✅ Added 'cc' alias (skip permissions)"
+        echo "   ✅ Added 'ccr' alias (skip permissions + resume)"
     else
+        # Check if ccr exists, add if not
+        if ! grep -q "alias ccr=" "$SHELL_RC" 2>/dev/null; then
+            echo "alias ccr='claude --dangerously-skip-permissions --resume'" >> "$SHELL_RC"
+            echo "   ✅ Added 'ccr' alias (skip permissions + resume)"
+        fi
         echo "   ℹ️  'cc' alias already exists"
     fi
 fi
