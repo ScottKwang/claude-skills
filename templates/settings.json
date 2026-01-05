@@ -1,0 +1,90 @@
+{
+  "model": "opus",
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(yarn *)",
+      "Bash(pnpm *)",
+      "Bash(node *)",
+      "Bash(python *)",
+      "Bash(pip *)",
+      "Bash(cargo *)",
+      "Bash(go *)",
+      "Bash(make *)",
+      "Bash(docker *)",
+      "Bash(kubectl *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(rm *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(chmod *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(sort *)",
+      "Bash(open *)",
+      "Bash(pbcopy *)",
+      "Bash(pbpaste *)",
+      "Bash(echo *)",
+      "Bash(touch *)",
+      "Bash(xcodebuild *)",
+      "Bash(swift *)",
+      "Bash(xcodegen *)",
+      "Bash(pod *)",
+      "Bash(brew *)",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "mcp__hyperbrowser__*"
+    ],
+    "deny": []
+  },
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true,
+    "ralph-wiggum@claude-plugins-official": true
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/skill-activation-prompt.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session-start-continuity.sh"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-compact-continuity.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

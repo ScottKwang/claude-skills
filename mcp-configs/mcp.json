@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "hyperbrowser": {
+      "command": "npx",
+      "args": ["--yes", "hyperbrowser-mcp"],
+      "env": {
+        "HYPERBROWSER_API_KEY": "${HYPERBROWSER_API_KEY}"
+      }
+    }
+  }
+}
