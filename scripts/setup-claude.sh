@@ -92,7 +92,26 @@ else
 fi
 
 # ============================================
-# 4. Install settings
+# 4. Install agents
+# ============================================
+echo ""
+echo "🤖 Installing agents..."
+
+mkdir -p "$CLAUDE_DIR/agents"
+
+if [ -d "$REPO_DIR/agents" ]; then
+    for agent in "$REPO_DIR/agents"/*.md; do
+        if [ -f "$agent" ]; then
+            cp "$agent" "$CLAUDE_DIR/agents/"
+            echo "   ✅ $(basename "$agent")"
+        fi
+    done
+else
+    echo "   ⚠️  Agents directory not found"
+fi
+
+# ============================================
+# 5. Install settings
 # ============================================
 echo ""
 echo "⚙️  Configuring settings..."
@@ -115,7 +134,7 @@ else
 fi
 
 # ============================================
-# 5. Install MCP config
+# 6. Install MCP config
 # ============================================
 echo ""
 echo "🔌 Configuring MCP servers..."
@@ -135,7 +154,7 @@ else
 fi
 
 # ============================================
-# 6. Summary
+# 7. Summary
 # ============================================
 echo ""
 echo "================================"
@@ -144,7 +163,8 @@ echo "================================"
 echo ""
 echo "Installed:"
 echo "  • cc alias (run 'source $SHELL_RC' to activate)"
-echo "  • Skills: /api-docs and more"
+echo "  • Skills: /api-docs, /github-search, and more"
+echo "  • Agents: codebase-analyzer, codebase-locator, etc."
 echo "  • Hooks: skill-activation, continuity, etc."
 echo "  • Settings: permissions, plugins, hooks"
 echo "  • MCP: hyperbrowser (browser automation)"
