@@ -10,6 +10,10 @@
     "railway": {
       "command": "npx",
       "args": ["-y", "@railway/mcp-server"]
+    },
+    "xcodebuildmcp": {
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp"]
     }
   }
 }

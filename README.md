@@ -53,8 +53,9 @@ Pre-bundled TypeScript hooks that enhance Claude Code:
 
 Pre-configured MCP servers:
 
-- **hyperbrowser** - Browser automation for web scraping
+- **hyperbrowser** - Browser automation for web scraping *(requires API key)*
 - **railway** - Deploy and manage Railway projects
+- **xcodebuildmcp** - Xcode build, simulator, and device automation for iOS/macOS development
 
 ### ⚙️ Settings
 
@@ -182,6 +183,8 @@ After setup, edit `~/.mcp.json` to add your API keys:
   }
 }
 ```
+
+**Hyperbrowser** requires an API key to function. Get one at [hyperbrowser.ai](https://hyperbrowser.ai).
 
 ## License
 
