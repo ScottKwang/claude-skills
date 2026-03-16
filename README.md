@@ -26,9 +26,6 @@ Then just run:
 | | `/api-docs refresh` | Refresh all cached documentation |
 | [github-push](skills/github-push.md) | `/github-push` | Commit and push with auto-generated message |
 | | `/github-push --pr` | Push and create pull request |
-| [railway](skills/railway.md) | `/railway deploy` | Deploy current project to Railway |
-| | `/railway logs` | View deployment logs |
-| | `/railway env` | Manage environment variables |
 | [vercel-env](skills/vercel-env.md) | `/vercel-env list` | List Vercel environment variables |
 | | `/vercel-env push` | Push local .env to Vercel |
 | [spec-generator](skills/spec-generator.md) | `/spec-generator` | Deep-dive spec interview to catch edge cases |
@@ -54,7 +51,6 @@ Pre-bundled TypeScript hooks that enhance Claude Code:
 Pre-configured MCP servers:
 
 - **hyperbrowser** - Browser automation for web scraping *(requires API key)*
-- **railway** - Deploy and manage Railway projects
 - **xcodebuildmcp** - Xcode build, simulator, and device automation for iOS/macOS development
 
 ### ⚙️ Settings
