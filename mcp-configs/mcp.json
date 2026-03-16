@@ -1,13 +1,10 @@
 {
   "mcpServers": {
-    "hyperbrowser": {
+    "playwright": {
       "command": "npx",
-      "args": ["--yes", "hyperbrowser-mcp"],
-      "env": {
-        "HYPERBROWSER_API_KEY": "${HYPERBROWSER_API_KEY}"
-      }
+      "args": ["-y", "@anthropic-ai/mcp-server-playwright@latest"]
     },
-    "xcodebuildmcp": {
+"xcodebuildmcp": {
       "command": "npx",
       "args": ["-y", "xcodebuildmcp"]
     }

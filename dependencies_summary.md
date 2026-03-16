@@ -11,19 +11,13 @@ These are needed for the hooks and basic skill functionality.
 | **gh** (GitHub CLI) | CLI | `brew install gh` | github-search, github-push skills |
 | **jq** | CLI | `brew install jq` | post-tool-use-tracker hook |
 
-## API Keys
-
-| Variable | Service | Used By | Required |
-|----------|---------|---------|----------|
-| `HYPERBROWSER_API_KEY` | [hyperbrowser.ai](https://hyperbrowser.ai) | Hyperbrowser MCP server | Only if using web scraping fallback |
-
 ## MCP Servers
 
-Configured in `mcp-configs/mcp.json`. Auto-installed via npx on first use.
+Configured in `mcp-configs/mcp.json`. Auto-installed via npx on first use. No API keys required.
 
 | Server | Package | Purpose |
 |--------|---------|---------|
-| **hyperbrowser** | `hyperbrowser-mcp` | Web scraping fallback when WebFetch is blocked |
+| **playwright** | `@anthropic-ai/mcp-server-playwright` | Browser automation, web scraping fallback when WebFetch is blocked |
 | **xcodebuildmcp** | `xcodebuildmcp` | Xcode build/simulator for iOS/macOS development |
 
 ## Skill-Specific Dependencies
@@ -73,7 +67,6 @@ Required:
   [x] jq
 
 Recommended:
-  [ ] Hyperbrowser API key (for web scraping)
   [ ] uv + Python 3.8+ (if using analysis agents)
 
 Optional:

@@ -253,7 +253,7 @@ Use these URLs for known providers:
 
 ## Notes
 
-- WebFetch may not work for all URLs (403 errors, auth-required pages). Fall back to mcp__hyperbrowser__scrape_webpage if needed.
-- For OpenAI specifically, use Hyperbrowser scraping as their docs block WebFetch.
+- WebFetch may not work for all URLs (403 errors, auth-required pages). Fall back to Playwright MCP (`browser_navigate` + `browser_snapshot`) if needed.
+- For OpenAI specifically, use Playwright as their docs block WebFetch.
 - Always preserve the "Cached from:" header so refresh can work.
 - The hook uses project-local paths (`.claude/hooks/`) not global paths.

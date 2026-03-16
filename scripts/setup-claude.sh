@@ -6,7 +6,7 @@
 # - cc alias (skip permission prompts)
 # - All custom skills
 # - Hooks system (skill activation, continuity, etc.)
-# - MCP servers (task-master, hyperbrowser)
+# - MCP servers (playwright, xcodebuildmcp)
 # - Settings with expanded permissions
 # - Plugins (swift-lsp, ralph-wiggum)
 
@@ -167,12 +167,11 @@ echo "  • Skills: /api-docs, /github-search, and more"
 echo "  • Agents: codebase-analyzer, codebase-locator, etc."
 echo "  • Hooks: skill-activation, continuity, etc."
 echo "  • Settings: permissions, plugins, hooks"
-echo "  • MCP: hyperbrowser (browser automation)"
+echo "  • MCP: playwright (browser automation)"
 echo ""
 echo "Next steps:"
 echo "  1. source $SHELL_RC   # Activate cc alias"
-echo "  2. Edit ~/.mcp.json   # Add your API keys"
-echo "  3. cc                 # Start Claude Code"
+echo "  2. cc                 # Start Claude Code"
 echo ""
 echo "Available skills:"
 for skill in "$CLAUDE_DIR/commands"/*.md; do

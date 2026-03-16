@@ -47,7 +47,7 @@
       "Grep",
       "WebFetch",
       "WebSearch",
-      "mcp__hyperbrowser__*"
+      "mcp__playwright__*"
     ],
     "deny": []
   },
