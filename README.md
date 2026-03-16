@@ -26,8 +26,6 @@ Then just run:
 | | `/api-docs refresh` | Refresh all cached documentation |
 | [github-push](skills/github-push.md) | `/github-push` | Commit and push with auto-generated message |
 | | `/github-push --pr` | Push and create pull request |
-| [vercel-env](skills/vercel-env.md) | `/vercel-env list` | List Vercel environment variables |
-| | `/vercel-env push` | Push local .env to Vercel |
 | [spec-generator](skills/spec-generator.md) | `/spec-generator` | Deep-dive spec interview to catch edge cases |
 
 ### 🪝 Hooks System

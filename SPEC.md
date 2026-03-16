@@ -1,40 +1,38 @@
-# Spec: Remove Railway Dependency
+# Spec: Remove Deployment Dependencies
 
 ## Overview
 
-Remove all Railway-related configuration, skills, and documentation from the repo. Deployment is handled outside this repo's skill set.
+Remove deployment/environment management skills (Railway, Vercel) from the repo. These are handled outside this repo's skill set.
 
-## Requirements
+## Completed
 
-1. **Delete `skills/railway.md`** — the Railway deployment skill file
-2. **Remove railway entry from `mcp-configs/mcp.json`** — the MCP server config
-3. **Update `README.md`** — remove all railway references:
-   - Railway row from the Skills table
-   - Railway bullet from the MCP Servers section
+### Railway (done)
+1. ~~Delete `skills/railway.md`~~
+2. ~~Remove railway entry from `mcp-configs/mcp.json`~~
+3. ~~Update `README.md` — remove railway references~~
 
-## Scope
-
-| File | Action |
-|------|--------|
-| `skills/railway.md` | Delete |
-| `mcp-configs/mcp.json` | Remove `railway` server entry |
-| `README.md` | Remove railway rows/bullets |
+### Vercel
+1. **Delete `skills/vercel-env.md`** — the Vercel env management skill
+2. **Update `README.md`** — remove vercel-env rows from Skills table
+3. **Update `dependencies_summary.md`** — remove vercel references
 
 ## Out of Scope
 
-- No replacement deployment skill needed — deployment is managed elsewhere
-- No changes to other skills, hooks, agents, or templates
+- Keep Vercel entry in `skills/api-docs.md` provider detection table (that's just doc fetching, not a dependency)
+- No replacement skills needed — managed elsewhere
+- No changes to hooks, agents, or templates
 
 ## Decision Log
 
-**Q:** Delete skill file or archive it?
+**Q:** Delete skill files or archive them?
 **A:** Delete entirely.
-**Rationale:** No need to keep dead code; git history preserves it if ever needed.
+**Rationale:** Git history preserves them if ever needed.
 
-**Q:** Remove MCP server config too?
-**A:** Yes.
-**Rationale:** The MCP server only exists to support the skill.
+**Q:** Remove MCP server config too? (Railway)
+**A:** Yes — the MCP server only existed to support the skill.
 
-**Q:** Why remove railway?
-**A:** Deployment is handled outside this repo's skills.
-**Rationale:** Keeps the repo focused on tools actually in use.
+**Q:** Why remove these?
+**A:** Deployment and env management are handled outside this repo's skills.
+
+**Q:** Remove Vercel from api-docs provider table?
+**A:** No — that's just documentation fetching, not a dependency on the Vercel CLI.
