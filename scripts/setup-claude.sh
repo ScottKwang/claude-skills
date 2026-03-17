@@ -2,6 +2,11 @@
 # Claude Code Full Setup Script
 # One-time setup to start ripping immediately
 #
+# Usage:
+#   ./setup-claude.sh              # Interactive — prompts for global or project
+#   ./setup-claude.sh --global     # Install to ~/.claude/ (all projects)
+#   ./setup-claude.sh --project .  # Install to specific project directory
+#
 # Installs:
 # - cc alias (skip permission prompts)
 # - All custom skills
@@ -14,7 +19,30 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname "$SCRIPT_DIR")"
-CLAUDE_DIR="$HOME/.claude"
+
+# ============================================
+# Parse arguments
+# ============================================
+INSTALL_MODE=""
+PROJECT_DIR=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --global)
+            INSTALL_MODE="global"
+            shift
+            ;;
+        --project)
+            INSTALL_MODE="project"
+            PROJECT_DIR="$(cd "$2" && pwd)"
+            shift 2
+            ;;
+        *)
+            echo "Usage: $0 [--global | --project <path>]"
+            exit 1
+            ;;
+    esac
+done
 
 echo "🚀 Claude Code Full Setup"
 echo "========================="
@@ -71,14 +99,50 @@ if command -v gh &>/dev/null; then
     fi
 fi
 
+# ============================================
+# Prompt for install mode if not specified
+# ============================================
+if [ -z "$INSTALL_MODE" ]; then
+    echo ""
+    echo "Where would you like to install?"
+    echo "  1) Global (~/.claude/) — applies to all projects"
+    echo "  2) Project directory — scoped to a specific project"
+    echo ""
+    read -p "Choose [1/2]: " choice
+    case "$choice" in
+        2)
+            INSTALL_MODE="project"
+            read -p "Project path (or . for current directory): " proj_path
+            PROJECT_DIR="$(cd "$proj_path" && pwd)"
+            ;;
+        *)
+            INSTALL_MODE="global"
+            ;;
+    esac
+fi
+
+# Set install directories based on mode
+if [ "$INSTALL_MODE" = "project" ]; then
+    INSTALL_DIR="$PROJECT_DIR/.claude"
+    MCP_FILE="$PROJECT_DIR/.mcp.json"
+    echo ""
+    echo "📁 Installing to project: $PROJECT_DIR"
+else
+    INSTALL_DIR="$HOME/.claude"
+    MCP_FILE="$HOME/.mcp.json"
+    echo ""
+    echo "📁 Installing globally to: ~/.claude/"
+fi
+
 # Create directories
-mkdir -p "$CLAUDE_DIR/commands"
-mkdir -p "$CLAUDE_DIR/hooks"
-mkdir -p "$CLAUDE_DIR/cache/hyperdocs"
+mkdir -p "$INSTALL_DIR/commands"
+mkdir -p "$INSTALL_DIR/hooks"
+mkdir -p "$INSTALL_DIR/cache/hyperdocs"
 
 # ============================================
-# 1. Install cc alias
+# 1. Install cc alias (always global)
 # ============================================
+echo ""
 echo "📝 Setting up 'cc' alias..."
 
 SHELL_RC=""
@@ -115,7 +179,7 @@ echo "📦 Installing skills..."
 if [ -d "$REPO_DIR/skills" ]; then
     for skill in "$REPO_DIR/skills"/*.md; do
         if [ -f "$skill" ]; then
-            cp "$skill" "$CLAUDE_DIR/commands/"
+            cp "$skill" "$INSTALL_DIR/commands/"
             echo "   ✅ $(basename "$skill")"
         fi
     done
@@ -131,12 +195,12 @@ echo "🪝 Installing hooks..."
 
 if [ -d "$REPO_DIR/hooks" ]; then
     # Copy entire hooks directory
-    cp -r "$REPO_DIR/hooks/"* "$CLAUDE_DIR/hooks/"
+    cp -r "$REPO_DIR/hooks/"* "$INSTALL_DIR/hooks/"
 
     # Make shell scripts executable
-    chmod +x "$CLAUDE_DIR/hooks/"*.sh 2>/dev/null || true
+    chmod +x "$INSTALL_DIR/hooks/"*.sh 2>/dev/null || true
 
-    echo "   ✅ Hooks installed to ~/.claude/hooks/"
+    echo "   ✅ Hooks installed to $INSTALL_DIR/hooks/"
     echo "   ✅ Shell scripts made executable"
 else
     echo "   ⚠️  Hooks directory not found"
@@ -148,12 +212,12 @@ fi
 echo ""
 echo "🤖 Installing agents..."
 
-mkdir -p "$CLAUDE_DIR/agents"
+mkdir -p "$INSTALL_DIR/agents"
 
 if [ -d "$REPO_DIR/agents" ]; then
     for agent in "$REPO_DIR/agents"/*.md; do
         if [ -f "$agent" ]; then
-            cp "$agent" "$CLAUDE_DIR/agents/"
+            cp "$agent" "$INSTALL_DIR/agents/"
             echo "   ✅ $(basename "$agent")"
         fi
     done
@@ -167,7 +231,7 @@ fi
 echo ""
 echo "⚙️  Configuring settings..."
 
-SETTINGS_FILE="$CLAUDE_DIR/settings.json"
+SETTINGS_FILE="$INSTALL_DIR/settings.json"
 
 if [ -f "$SETTINGS_FILE" ]; then
     echo "   ⚠️  Existing settings found - creating backup"
@@ -190,8 +254,6 @@ fi
 echo ""
 echo "🔌 Configuring MCP servers..."
 
-MCP_FILE="$HOME/.mcp.json"
-
 if [ -f "$MCP_FILE" ]; then
     echo "   ℹ️  Existing MCP config found at $MCP_FILE"
     echo "   📋 Template available at: $REPO_DIR/mcp-configs/mcp.json"
@@ -211,6 +273,12 @@ echo "================================"
 echo "🎉 Setup Complete!"
 echo "================================"
 echo ""
+if [ "$INSTALL_MODE" = "project" ]; then
+    echo "Installed to: $PROJECT_DIR/.claude/"
+else
+    echo "Installed to: ~/.claude/ (global)"
+fi
+echo ""
 echo "Installed:"
 echo "  • cc alias (run 'source $SHELL_RC' to activate)"
 echo "  • Skills: /api-docs, /github-search, and more"
@@ -224,7 +292,7 @@ echo "  1. source $SHELL_RC   # Activate cc alias"
 echo "  2. cc                 # Start Claude Code"
 echo ""
 echo "Available skills:"
-for skill in "$CLAUDE_DIR/commands"/*.md; do
+for skill in "$INSTALL_DIR/commands"/*.md; do
     if [ -f "$skill" ]; then
         name=$(basename "$skill" .md)
         echo "  • /$name"

@@ -153,3 +153,46 @@ Add dependency checking and auto-installation to `scripts/setup-claude.sh` so us
 - Homebrew is the assumed package manager (macOS focus). If brew isn't available, fall back to warning with manual install instructions.
 - `set -e` is already in the script, so failed installs will halt — that's fine, the user needs these deps.
 - gh auth is interactive, so we prompt the user rather than running it automatically.
+
+---
+
+## Plan: Add Global vs Project Install Mode
+
+### Goal
+
+Let users choose whether to install to `~/.claude/` (global, affects all projects) or to a specific project's `.claude/` directory (project-scoped).
+
+### Interface
+
+- `./setup-claude.sh` — interactive prompt asking global or project
+- `./setup-claude.sh --project /path/to/dir` — skip prompt, install to that project directory
+- `./setup-claude.sh --global` — skip prompt, install to ~/.claude/ (current behavior)
+
+### Behavior by Mode
+
+**Global mode** (current behavior, default):
+- Install target: `~/.claude/`
+- Skills → `~/.claude/commands/`
+- Hooks → `~/.claude/hooks/`
+- Agents → `~/.claude/agents/`
+- Settings → `~/.claude/settings.json`
+- MCP → `~/.mcp.json`
+- Aliases → shell rc file
+
+**Project mode**:
+- Install target: `<project>/.claude/`
+- Skills → `<project>/.claude/commands/`
+- Hooks → `<project>/.claude/hooks/`
+- Agents → `<project>/.claude/agents/`
+- Settings → `<project>/.claude/settings.json`
+- MCP → `<project>/.mcp.json`
+- Aliases → still shell rc file (global by nature)
+
+### Changes to `scripts/setup-claude.sh`
+
+1. **Parse CLI args**: check for `--project <path>` or `--global`
+2. **If no args**: prompt user interactively (read -p)
+3. **Set `INSTALL_DIR`** based on mode: either `$HOME/.claude` or `<project>/.claude`
+4. **Set `MCP_FILE`** based on mode: either `$HOME/.mcp.json` or `<project>/.mcp.json`
+5. **Replace all `$CLAUDE_DIR` references** with `$INSTALL_DIR`
+6. **Summary output**: clearly state where things were installed
