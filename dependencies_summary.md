@@ -66,6 +66,5 @@ Recommended:
   [ ] uv + Python 3.8+ (if using analysis agents)
 
 Optional:
-  [ ] Braintrust account (for session analysis)
   [ ] xcodebuildmcp (for iOS development)
 ```

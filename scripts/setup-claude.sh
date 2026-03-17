@@ -20,6 +20,57 @@ echo "🚀 Claude Code Full Setup"
 echo "========================="
 echo ""
 
+# ============================================
+# 0. Check & install dependencies
+# ============================================
+echo "🔍 Checking dependencies..."
+
+HAS_BREW=false
+if command -v brew &>/dev/null; then
+    HAS_BREW=true
+fi
+
+install_dep() {
+    local name="$1"
+    local check_cmd="$2"
+    local brew_pkg="$3"
+
+    if command -v "$check_cmd" &>/dev/null; then
+        echo "   ✅ $name"
+    elif $HAS_BREW; then
+        echo "   📦 Installing $name..."
+        brew install "$brew_pkg"
+        echo "   ✅ $name installed"
+    else
+        echo "   ❌ $name not found — install manually: brew install $brew_pkg"
+        MISSING_DEPS=true
+    fi
+}
+
+MISSING_DEPS=false
+install_dep "Node.js" "node" "node"
+install_dep "git" "git" "git"
+install_dep "GitHub CLI (gh)" "gh" "gh"
+install_dep "jq" "jq" "jq"
+
+if $MISSING_DEPS; then
+    echo ""
+    echo "   ⚠️  Some dependencies are missing. Install Homebrew first:"
+    echo "      /bin/bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\""
+    echo "   Then re-run this script."
+    exit 1
+fi
+
+# Check gh authentication
+if command -v gh &>/dev/null; then
+    if ! gh auth status &>/dev/null; then
+        echo ""
+        echo "   ⚠️  GitHub CLI is not authenticated."
+        echo "   Run: gh auth login"
+        echo ""
+    fi
+fi
+
 # Create directories
 mkdir -p "$CLAUDE_DIR/commands"
 mkdir -p "$CLAUDE_DIR/hooks"
@@ -148,8 +199,7 @@ if [ -f "$MCP_FILE" ]; then
 else
     if [ -f "$REPO_DIR/mcp-configs/mcp.json" ]; then
         cp "$REPO_DIR/mcp-configs/mcp.json" "$MCP_FILE"
-        echo "   ✅ MCP config installed"
-        echo "   ⚠️  Update API keys in ~/.mcp.json"
+        echo "   ✅ MCP config installed (no API keys needed)"
     fi
 fi
 
