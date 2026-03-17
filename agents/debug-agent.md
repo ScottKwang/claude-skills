@@ -40,11 +40,13 @@ $CLAUDE_PROJECT_DIR = /path/to/project
 
 ### Codebase Exploration
 ```bash
-# Codebase exploration (RepoPrompt) - trace code flow
-rp-cli -e 'workspace list'  # Check workspace
-rp-cli -e 'structure src/'  # Understand architecture
-rp-cli -e 'search "error message" --context-lines 5'  # Find error origin
-rp-cli -e 'read file.ts --start-line 100 --limit 50'  # Read specific sections
+# Codebase exploration - trace code flow
+# Find code signatures to understand architecture
+Grep("^export (function|class|type|interface) ", glob: "src/**/*.ts")
+# Find error origin with context
+Grep("error message", context: 5)
+# Read specific file sections
+Read("file.ts", offset: 100, limit: 50)
 
 # Fast code search (Morph/WarpGrep) - find patterns quickly
 uv run python -m runtime.harness scripts/morph_search.py --query "function_name" --path "."
@@ -132,16 +134,16 @@ Generated: [timestamp]
 
 ```bash
 # Find where error originates
-rp-cli -e 'search "exact error message"'
+Grep("exact error message")
 
 # Trace function calls
-rp-cli -e 'search "functionName(" --max-results 50'
+Grep("functionName\\(", head_limit: 50)
 
 # Find related tests
-rp-cli -e 'search "describe.*functionName"'
+Grep("describe.*functionName", glob: "**/*.test.*")
 
 # Check for TODO/FIXME near issue
-rp-cli -e 'search "TODO|FIXME" --context-lines 2'
+Grep("TODO|FIXME", context: 2)
 ```
 
 ## Rules

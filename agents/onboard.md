@@ -21,44 +21,23 @@ If thoughts/ doesn't exist, tell the user to run `init-project.sh` and stop.
 
 ### Step 2: Codebase Analysis
 
-**Try RepoPrompt first (preferred):**
-
-```bash
-# 1. Check if rp-cli is available
-which rp-cli
-
-# 2. List workspaces - check if this project exists
-rp-cli -e 'workspace list'
-
-# 3. If workspace doesn't exist, create it and add folder:
-rp-cli -e 'workspace create --name "project-name"'
-rp-cli -e 'call manage_workspaces {"action": "add_folder", "workspace": "project-name", "folder_path": "/full/path/to/project"}'
-
-# 4. Switch to the workspace (by name)
-rp-cli -e 'workspace switch "project-name"'
-
-# 5. Explore the codebase
-rp-cli -e 'tree'
-rp-cli -e 'structure .'
-rp-cli -e 'builder "understand the codebase architecture"'
 ```
-
-**Important:** `workspace switch` takes a NAME or UUID, not a path.
-
-**Fallback (no RepoPrompt):**
-
-```bash
 # Project structure
-find . -maxdepth 3 -type f \( -name "*.md" -o -name "package.json" -o -name "pyproject.toml" -o -name "Cargo.toml" -o -name "go.mod" \) 2>/dev/null | head -20
+Glob("**/*") — focus on src/, app/, lib/, packages/
+Bash("ls -la src/ app/ lib/ packages/ 2>/dev/null")
 
-# Key directories
-ls -la src/ app/ lib/ packages/ 2>/dev/null | head -30
+# Find config/manifest files
+Glob("**/package.json", "**/pyproject.toml", "**/Cargo.toml", "**/go.mod")
 
-# README content
-head -100 README.md 2>/dev/null
+# Read README
+Read("README.md", limit: 100)
+
+# Find code signatures to understand architecture
+Grep("^export (function|class|type|interface) ", glob: "src/**/*.ts")
+Grep("^(class |def |async def )", glob: "**/*.py")
 
 # Search for entry points
-grep -r "main\|entry" --include="*.json" . 2>/dev/null | head -10
+Grep("main|entry", glob: "**/*.json")
 ```
 
 ### Step 3: Detect Tech Stack
@@ -155,4 +134,4 @@ Return to main conversation with:
 - This agent is for BROWNFIELD projects (existing code)
 - For greenfield, recommend using `/create_plan` instead
 - Ledger can be updated anytime with `/continuity_ledger`
-- Uses rp-cli for exploration (falls back to bash if unavailable)
+- Uses native Claude Code tools (Glob, Grep, Read) for exploration

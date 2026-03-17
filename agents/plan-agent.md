@@ -51,10 +51,13 @@ uv run python -m runtime.harness scripts/nia_docs.py --query "best practices for
 # Latest approaches (Perplexity)
 uv run python -m runtime.harness scripts/perplexity_search.py --query "modern approach to [topic] 2024"
 
-# Codebase exploration (RepoPrompt) - understand existing patterns
-rp-cli -e 'workspace list'  # Check workspace
-rp-cli -e 'structure src/'  # See architecture
-rp-cli -e 'search "pattern" --max-results 20'  # Find related code
+# Codebase exploration - understand existing patterns
+# Use Grep to find code signatures (like codemaps)
+Grep("^export (function|class|type|interface) ", glob: "src/**/*.ts")
+# Search for related code with context
+Grep("pattern", context: 3)
+# Read specific file sections
+Read("file.ts", offset: 1, limit: 50)
 
 # Fast code search (Morph/WarpGrep)
 uv run python -m runtime.harness scripts/morph_search.py --query "existing implementation" --path "."
@@ -93,7 +96,7 @@ Generated: [timestamp]
 [Key findings from MCP research]
 
 ## Existing Codebase Analysis
-[Relevant patterns, files, architecture notes from repoprompt]
+[Relevant patterns, files, architecture notes from codebase analysis]
 
 ## Implementation Phases
 
@@ -121,5 +124,5 @@ Generated: [timestamp]
 1. **Read the skill file first** - it has the full methodology
 2. **Use MCP tools for research** - don't guess at best practices
 3. **Be specific** - name exact files, functions, line numbers
-4. **Follow existing patterns** - use repoprompt to find them
+4. **Follow existing patterns** - use Grep to find them
 5. **Write to output file** - don't just return text

@@ -34,7 +34,6 @@ These are optional — only needed if using the corresponding agents.
 |-----------|------|---------|--------|
 | **uv** | Python pkg manager | `brew install uv` | braintrust-analyst, session-analyst, context-query-agent, plan-agent, research-agent, review-agent, validate-agent, debug-agent |
 | **Python 3.8+** | Runtime | Pre-installed on macOS | Same as above |
-| **rp-cli** (RepoPrompt) | CLI | Via RepoPrompt app | rp-explorer, onboard, plan-agent, research-agent, debug-agent |
 | **sqlite3** | CLI | Pre-installed on macOS | session-start-continuity hook (artifact index queries) |
 
 ## Hook Development Only
@@ -69,7 +68,6 @@ Recommended:
   [ ] uv + Python 3.8+ (if using analysis agents)
 
 Optional:
-  [ ] RepoPrompt / rp-cli (for codebase exploration agents)
   [ ] Braintrust account (for session analysis)
   [ ] xcodebuildmcp (for iOS development)
 ```

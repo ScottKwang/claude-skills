@@ -1,6 +1,6 @@
 ---
 name: research-agent
-description: Comprehensive research using MCP tools (nia, perplexity, repoprompt, firecrawl)
+description: Comprehensive research using MCP tools (nia, perplexity, firecrawl)
 model: opus
 ---
 
@@ -55,11 +55,13 @@ uv run python -m runtime.harness scripts/firecrawl_scrape.py --url "https://..."
 
 ### For Codebase Knowledge
 ```bash
-# Codebase exploration (RepoPrompt) - token efficient
-rp-cli -e 'workspace list'  # Check workspace
-rp-cli -e 'structure src/'  # Codemaps (signatures only)
-rp-cli -e 'search "pattern" --max-results 20'  # Search
-rp-cli -e 'read file.ts --start-line 50 --limit 30'  # Slices
+# Codebase exploration - token efficient
+# Use Grep to find code signatures (like codemaps)
+Grep("^export (function|class|type|interface) ", glob: "src/**/*.ts")
+# Search for patterns with context
+Grep("pattern", context: 3)
+# Read specific file sections (not whole files)
+Read("file.ts", offset: 50, limit: 30)
 
 # Fast code search (Morph/WarpGrep)
 uv run python -m runtime.harness scripts/morph_search.py --query "pattern" --path "."
@@ -119,6 +121,6 @@ Generated: [timestamp]
 1. **Read the skill file first** - it has the full methodology
 2. **Be thorough** - you have your own context, use it
 3. **Cite sources** - note where information came from
-4. **Use codemaps over full files** - token efficient
+4. **Use Grep for signatures over full files** - token efficient
 5. **Summarize at the end** - main conversation needs quick takeaways
 6. **Write to output file** - don't just return text

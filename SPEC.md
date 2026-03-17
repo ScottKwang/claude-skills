@@ -54,6 +54,43 @@ Remove the `qlty` external dependency. Instead, detect and run whatever linter t
 
 ---
 
+## Plan: Replace RepoPrompt with Native Claude Code Tools
+
+### Goal
+
+Remove the `rp-cli` (RepoPrompt) external dependency from all agents. Replace with Claude Code's built-in tools: Glob, Grep, Read.
+
+### Mapping: rp-cli → Native Tools
+
+| rp-cli Command | Purpose | Replacement |
+|---|---|---|
+| `tree` | File tree | `Glob("**/*")` or `Bash("ls")` |
+| `structure .` | Code signatures/codemaps | `Grep` for function/class/type definitions |
+| `search "pattern"` | Code search with context | `Grep` with `-C` context lines |
+| `read file --start-line --limit` | Read file slices | `Read` with offset/limit |
+| `select` / `context --all` | Export selected files | `Read` multiple files |
+| `builder "query"` | AI-powered file selection | `Glob` + `Grep` to find relevant files |
+| `workspace list/switch` | Workspace management | Not needed — already in project dir |
+
+### Files to Change
+
+| File | Change |
+|------|--------|
+| `agents/rp-explorer.md` | Rewrite entirely. Replace rp-cli commands with Glob/Grep/Read equivalents. Keep the same purpose (token-efficient codebase exploration) and response format. |
+| `agents/onboard.md` | Replace Step 2 "Try RepoPrompt first" block with native tool equivalents. Remove the fallback structure (native tools ARE the primary approach). |
+| `agents/research-agent.md` | Replace "For Codebase Knowledge" rp-cli block with Grep/Read. Update description to remove "repoprompt" mention. Remove "use repoprompt to find them" reference. |
+| `agents/plan-agent.md` | Replace "Codebase exploration (RepoPrompt)" block with Grep/Read equivalents. Update template to say "codebase analysis" instead of "repoprompt". |
+| `agents/debug-agent.md` | Replace "Codebase Exploration" rp-cli block and "Example Investigation" rp-cli commands with Grep equivalents. |
+| `dependencies_summary.md` | Remove rp-cli row from Agent Dependencies table. |
+
+### Approach
+
+1. **`rp-explorer.md`** — Full rewrite. Same structure but using native tools. The "token efficiency" framing still applies: use Grep for signatures instead of reading whole files, use Read with offset/limit for slices.
+2. **Other 4 agents** — Surgical replacement of rp-cli code blocks with equivalent Glob/Grep/Read commands. Keep surrounding text intact.
+3. **`dependencies_summary.md`** — Remove rp-cli row.
+
+---
+
 ## Decision Log
 
 **Q:** Delete skill files or archive them?
