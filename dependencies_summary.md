@@ -55,7 +55,6 @@ Users do **not** need these — hooks ship pre-bundled as `.mjs` files in `hooks
 |---------|---------|-------------|
 | **Braintrust** | Session trace analysis | braintrust-analyst, session-analyst, review-agent, validate-agent |
 | **OpenAI API** | Learnings extraction (LLM-as-judge) | session-end-cleanup hook |
-| **qlty** | Code quality checks | review-agent |
 
 ## Quick Start Checklist
 

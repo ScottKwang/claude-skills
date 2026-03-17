@@ -67,9 +67,9 @@ async function main() {
             errorLines.push(`  ${err}`);
           }
         }
-        if (checkResult.qlty_errors?.length > 0) {
+        if (checkResult.lint_errors?.length > 0) {
           errorLines.push("**Lint Issues:**");
-          for (const err of checkResult.qlty_errors.slice(0, 5)) {
+          for (const err of checkResult.lint_errors.slice(0, 5)) {
             errorLines.push(`  ${err}`);
           }
         }

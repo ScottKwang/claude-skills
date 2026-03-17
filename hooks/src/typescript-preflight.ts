@@ -1,7 +1,7 @@
 /**
  * PostToolUse Hook: TypeScript Pre-flight Check
  *
- * Runs tsc + qlty after Edit/Write on .ts/.tsx files to catch errors immediately.
+ * Runs tsc + project linter after Edit/Write on .ts/.tsx files to catch errors immediately.
  * Returns errors as system reminder so Claude can fix before moving on.
  */
 
@@ -110,9 +110,9 @@ async function main() {
           }
         }
 
-        if (checkResult.qlty_errors?.length > 0) {
+        if (checkResult.lint_errors?.length > 0) {
           errorLines.push('**Lint Issues:**');
-          for (const err of checkResult.qlty_errors.slice(0, 5)) {
+          for (const err of checkResult.lint_errors.slice(0, 5)) {
             errorLines.push(`  ${err}`);
           }
         }

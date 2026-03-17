@@ -73,20 +73,25 @@ uv run pytest 2>&1 || echo "pytest failed"
 uv run mypy src/ 2>&1 || echo "type check failed"
 ```
 
-### 1.5 Run Code Quality Checks (qlty)
+### 1.5 Run Project Linter
+
+Auto-detect the project's linter and run it on changed files:
 
 ```bash
-# Lint changed files
-uv run python -m runtime.harness scripts/qlty_check.py
+# JavaScript/TypeScript — check for eslint config
+if ls .eslintrc* eslint.config.* 2>/dev/null; then
+  npx eslint --no-warn-ignored $(git diff --name-only HEAD -- '*.ts' '*.tsx' '*.js' '*.jsx')
+fi
 
-# Get complexity metrics
-uv run python -m runtime.harness scripts/qlty_check.py --metrics
-
-# Find code smells
-uv run python -m runtime.harness scripts/qlty_check.py --smells
+# Python — check for ruff or pylint
+if [ -f ruff.toml ] || grep -q '\[tool.ruff\]' pyproject.toml 2>/dev/null; then
+  ruff check $(git diff --name-only HEAD -- '*.py')
+elif grep -q '\[pylint\]' setup.cfg pyproject.toml 2>/dev/null; then
+  pylint $(git diff --name-only HEAD -- '*.py')
+fi
 ```
 
-Note: If qlty is not initialized, skip with note in report.
+Note: If no linter config is found, skip with note in report.
 
 Document pass/fail for each command.
 
@@ -178,10 +183,9 @@ Session: [session ID]
 ✓ Tests pass: `uv run pytest`
 ✗ Type check: `uv run mypy` (3 errors)
 
-## Code Quality (qlty)
+## Code Quality (Linting)
 ✓ Linting: 0 issues
 ⚠️ Complexity: 2 functions exceed threshold
-✓ Code smells: None detected
 
 ## Requirements Status
 
