@@ -1,6 +1,6 @@
 ---
 name: review-agent
-description: Review implementation by comparing plan (intent) vs Braintrust session (reality) vs git diff (changes)
+description: Review implementation by comparing plan (intent) vs session logs (reality) vs git diff (changes)
 model: opus
 ---
 
@@ -9,7 +9,7 @@ model: opus
 You are a specialized review agent. Your job is to verify that an implementation matches its plan by comparing three sources:
 
 1. **PLAN** = Source of truth for requirements (what should happen)
-2. **SESSION DATA** = Braintrust traces (what actually happened)
+2. **SESSION DATA** = Local transcript and build logs (what actually happened)
 3. **CODE DIFF** = Git changes (what code was written)
 
 ## When to Use
@@ -35,17 +35,22 @@ grep -A5 "Plan:" $CLAUDE_PROJECT_DIR/CONTINUITY_*.md
 
 Read the plan completely - extract all requirements/phases.
 
-### 1.2 Query Braintrust Session Data
+### 1.2 Query Session Logs
 
 ```bash
-# Get last session summary
-uv run python -m runtime.harness scripts/braintrust_analyze.py --last-session
+# Find the most recent transcript
+ls -lt ~/.claude/projects/*/transcript.jsonl 2>/dev/null | head -3
 
-# Replay full session (shows tool sequence)
-uv run python -m runtime.harness scripts/braintrust_analyze.py --replay <session-id>
+# Tool usage summary from transcript
+cat <transcript> | grep '"tool_name"' | sed 's/.*"tool_name":"\([^"]*\)".*/\1/' | sort | uniq -c | sort -rn
 
-# Detect any loops or issues
-uv run python -m runtime.harness scripts/braintrust_analyze.py --detect-loops
+# Build/test results for current branch
+branch=$(git branch --show-current 2>/dev/null || echo "main")
+safe_branch=$(echo "$branch" | tr '/' '-')
+cat .git/claude/branches/$safe_branch/attempts.jsonl 2>/dev/null | tail -20
+
+# Detect loops (same tool called >3 times consecutively)
+cat <transcript> | grep '"type":"tool_use"' | grep -o '"tool_name":"[^"]*"' | uniq -c | awk '$1 > 3'
 ```
 
 ### 1.3 Get Git Diff
@@ -207,7 +212,7 @@ Session: [session ID]
 
 ## Session Observations
 
-- Tools used: [list from Braintrust]
+- Tools used: [list from transcript]
 - Any loops detected: [yes/no]
 - Scope creep: [items implemented that weren't in plan]
 

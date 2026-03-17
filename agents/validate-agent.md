@@ -43,15 +43,20 @@ Identify all technical decisions from the plan:
 - APIs or external services used
 - Implementation approaches
 
-## Step 4: Check Past Precedent (RAG-Judge)
+## Step 4: Check Past Precedent
 
-Query the Artifact Index for relevant past work:
+Search continuity ledgers and git history for similar past work:
 
 ```bash
-uv run python scripts/braintrust_analyze.py --rag-judge --plan-file <plan-path>
+# Search ledgers for related decisions
+Grep("relevant keyword", path: "thoughts/ledgers/")
+
+# Search git history for similar implementations
+git log --oneline --all --grep="relevant keyword" | head -20
+git log --oneline --all -S "relevant pattern" -- '*.ts' '*.py' | head -20
 ```
 
-Note: If the script doesn't exist or fails, skip this step and note it in your handoff.
+Note: If no ledgers or relevant history exist, skip this step and note it in your handoff.
 
 ## Step 5: Research Each Choice
 
