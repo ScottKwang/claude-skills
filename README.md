@@ -49,6 +49,8 @@ Agents run as subprocesses for complex tasks. Installed to `~/.claude/agents/` o
 | [braintrust-analyst](agents/braintrust-analyst.md) | Analyze sessions from local transcript logs | `.claude/cache/agents/braintrust-analyst/latest-output.md` |
 | [session-analyst](agents/session-analyst.md) | Lightweight session analysis | `.claude/cache/agents/session-analyst/latest-output.md` |
 
+**How agents work:** Agents are spawned automatically by Claude Code as subprocesses via the `Agent` tool whenever a task matches an agent's `description` field. The setup script installs the `.md` files to `~/.claude/agents/` (global) or `<project>/.claude/agents/` (project-scoped), where Claude Code picks them up by `name`. You can also request a specific agent explicitly (e.g., "use the debug agent to investigate this"). Each agent's `model` frontmatter field controls which Claude model it runs on. The `subagent-stop-continuity` hook logs agent output to `.claude/cache/agents/<name>/latest-output.md` so results persist across conversations.
+
 ### 🪝 Hooks System
 
 Pre-bundled TypeScript hooks that run automatically at Claude Code lifecycle events. **Zero runtime dependencies** — hooks are pre-bundled JS, just clone and go.
