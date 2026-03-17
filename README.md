@@ -155,32 +155,33 @@ curl -o ~/.claude/settings.json https://raw.githubusercontent.com/ecoglito/claud
 
 ## Adding Your Own Skills
 
-1. Create a `.md` file in `skills/`
-2. Follow the template structure:
+Use the skill-creator plugin:
 
-```markdown
-# Skill Name
-
-Description.
-
-## Usage
-
-- `/skill-name action` - What it does
-
-## Arguments
-$ARGUMENTS
-
----
-
-## Instructions
-
-### Command: `action`
-
-Step-by-step instructions...
+```
+/skill-creator
 ```
 
-3. Push to main
-4. Re-run `./scripts/setup-claude.sh` on other devices
+This walks you through creating a new skill interactively — scaffolding the markdown file, setting up trigger rules, and optionally running evals to test it. You can also use it to modify existing skills or benchmark their performance.
+
+### Installing the skill-creator plugin
+
+If you ran `./scripts/setup-claude.sh`, the plugin is already installed. To install it manually:
+
+1. Open Claude Code and run `/plugin` to open the plugin manager
+2. Search for **skill-creator** in the `claude-plugins-official` marketplace
+3. Install and enable it
+
+Or add it directly to your `~/.claude/settings.json`:
+
+```json
+{
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
+  }
+}
+```
+
+To install manually without the plugin, create a `.md` file in `skills/` following the existing patterns, then re-run `./scripts/setup-claude.sh` on other devices.
 
 ## Updating
 
